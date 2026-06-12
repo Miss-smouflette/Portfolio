@@ -386,6 +386,51 @@
       width:100%;
       border-radius:16px;
       display:block;
+      cursor:zoom-in;
+      transition:transform .25s ease;
+    }
+
+    .gallery img:hover{
+      transform:scale(1.02);
+    }
+
+    .zoom-modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.92);
+      z-index:1000;
+      justify-content:center;
+      align-items:center;
+      padding:24px;
+    }
+
+    .zoom-modal.open{
+      display:flex;
+    }
+
+    .zoom-modal img{
+      max-width:92vw;
+      max-height:92vh;
+      object-fit:contain;
+      border-radius:18px;
+      box-shadow:0 30px 90px rgba(0,0,0,.6);
+      cursor:zoom-out;
+      animation:zoomIn .2s ease;
+    }
+
+    .zoom-close{
+      position:fixed;
+      top:20px;
+      right:20px;
+      width:46px;
+      height:46px;
+      border:none;
+      border-radius:14px;
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      font-size:24px;
+      cursor:pointer;
     }
 
     footer{
@@ -409,6 +454,7 @@
     @keyframes fadeDown{to{opacity:1;transform:translateY(0)}}
     @keyframes pulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.08);opacity:1}}
     @keyframes pop{from{transform:scale(.96);opacity:.5}to{transform:scale(1);opacity:1}}
+    @keyframes zoomIn{from{transform:scale(.92);opacity:.4}to{transform:scale(1);opacity:1}}
 
     @media (max-width: 900px){
       .hero{min-height:auto;padding-top:22px}
@@ -501,7 +547,7 @@
 
         <article class="card project" data-project="entreprise">
           <div class="shot">
-            <img src="./capture-4png" alt="Capture du projet r-f-rencement-entreprise" />
+            <img src="./capture-5.png" alt="Capture du projet r-f-rencement-entreprise" />
             <div class="label">Cliquer pour voir les images</div>
           </div>
           <div class="body">
@@ -519,14 +565,15 @@
       <h2 class="section-title">Contact</h2>
       <div class="panel">
         <p class="about" style="margin-bottom:0;">
-          https://www.malt.fr/profile/emiliebolo?origin=site_nav_bar
+          <a href="https://www.malt.fr/profile/emiliebolo?origin=site_nav_bar" target="_blank" rel="noreferrer">Mon profil Malt</a>
+        </p>
       </div>
     </section>
 
     <footer>© 2026 Miss Smouflette — Portfolio personnel</footer>
   </div>
 
- <div class="modal" id="projectModal" aria-hidden="true">
+  <div class="modal" id="projectModal" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-head">
         <h3 id="modalTitle">Projet</h3>
@@ -534,6 +581,11 @@
       </div>
       <div class="gallery" id="modalGallery"></div>
     </div>
+  </div>
+
+  <div class="zoom-modal" id="zoomModal" aria-hidden="true">
+    <button class="zoom-close" id="closeZoom" aria-label="Fermer le zoom">×</button>
+    <img id="zoomImg" src="" alt="">
   </div>
 
   <script>
@@ -550,15 +602,18 @@
     const modalGallery = document.getElementById('modalGallery');
     const closeModal = document.getElementById('closeModal');
 
+    const zoomModal = document.getElementById('zoomModal');
+    const zoomImg = document.getElementById('zoomImg');
+    const closeZoom = document.getElementById('closeZoom');
+
     const projectData = {
       ems: {
         title: 'ems-app',
         images: [
-        './capture-1.png',
+          './capture-1.png',
           './capture-2.png',
           './capture-3.png',
-           './capture-4.png',
-
+          './capture-4.png'
         ]
       },
       entreprise: {
@@ -567,10 +622,19 @@
           './capture-5.png',
           './capture-6.png',
           './capture-7.png'
-
         ]
       }
     };
+
+    function closeProjectModal(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function closeZoomModal(){
+      zoomModal.classList.remove('open');
+      zoomModal.setAttribute('aria-hidden', 'true');
+    }
 
     document.querySelectorAll('.project').forEach(card => {
       card.addEventListener('click', (e) => {
@@ -583,25 +647,32 @@
         `).join('');
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
+
+        modalGallery.querySelectorAll('img').forEach(img => {
+          img.addEventListener('click', () => {
+            zoomImg.src = img.src;
+            zoomImg.alt = img.alt;
+            zoomModal.classList.add('open');
+            zoomModal.setAttribute('aria-hidden', 'false');
+          });
+        });
       });
     });
 
-    closeModal.addEventListener('click', () => {
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden', 'true');
+    closeModal.addEventListener('click', closeProjectModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeProjectModal();
     });
 
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
-      }
+    closeZoom.addEventListener('click', closeZoomModal);
+    zoomModal.addEventListener('click', (e) => {
+      if (e.target === zoomModal || e.target === zoomImg) closeZoomModal();
     });
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
+        closeProjectModal();
+        closeZoomModal();
       }
     });
   </script>
