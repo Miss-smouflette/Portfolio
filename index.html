@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Miss Smouflette — Portfolio</title>
+  <style>
+    :root{
+      --bg:#070a0f;
+      --panel:#0d1117;
+      --panel2:#111826;
+      --line:#1f2a3d;
+      --text:#eef3fb;
+      --muted:#99a7bb;
+      --accent:#7c8cff;
+      --accent2:#22d3ee;
+      --shadow:0 20px 70px rgba(0,0,0,.45);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 20% 10%, rgba(124,140,255,.16), transparent 24%),
+        radial-gradient(circle at 80% 20%, rgba(34,211,238,.12), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(255,128,196,.10), transparent 26%),
+        var(--bg);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit;text-decoration:none}
+    .wrap{width:min(1160px,92vw);margin:0 auto}
+
+    .topbar{
+      padding:24px 0 0;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      opacity:0;
+      transform:translateY(-12px);
+      animation:fadeDown .8s ease forwards;
+    }
+
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 0 30px rgba(124,140,255,.35);
+    }
+
+    .pill{
+      padding:10px 16px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      backdrop-filter:blur(10px);
+    }
+
+    .hero{
+      min-height:92vh;
+      display:grid;
+      align-items:center;
+      padding:40px 0 70px;
+      position:relative;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:28px;
+      align-items:stretch;
+    }
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+      border:1px solid rgba(124,140,255,.14);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+    }
+
+    .intro{
+      padding:36px;
+      position:relative;
+      overflow:hidden;
+      opacity:0;
+      transform:translateY(20px);
+      animation:fadeUp .9s .15s ease forwards;
+    }
+
+    .intro::before{
+      content:"";
+      position:absolute;
+      inset:-120px auto auto -120px;
+      width:280px;height:280px;border-radius:50%;
+      background:radial-gradient(circle, rgba(124,140,255,.18), transparent 65%);
+      filter:blur(6px);
+      pointer-events:none;
+      animation:pulse 6s ease-in-out infinite;
+    }
+
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:.82rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:#c6cff6;
+      margin-bottom:18px;
+    }
+
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:#34d399;
+      box-shadow:0 0 12px #34d399;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(2.6rem,7vw,5.2rem);
+      line-height:.92;
+      letter-spacing:-.04em;
+    }
+
+    .accent{
+      background:linear-gradient(90deg,#fb7cff,#8f8cff,#22d3ee);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .lead{
+      margin:22px 0 0;
+      max-width:62ch;
+      font-size:1.06rem;
+      line-height:1.8;
+      color:var(--muted);
+    }
+
+    .cta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:30px;
+    }
+
+    .btn{
+      padding:14px 18px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      font-weight:700;
+      transition:transform .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-3px);
+      border-color:rgba(124,140,255,.45);
+      box-shadow:0 16px 34px rgba(0,0,0,.28);
+    }
+
+    .btn.primary{
+      background:linear-gradient(135deg,#6f7cff,#22d3ee);
+      border-color:transparent;
+      color:#071018;
+    }
+
+    .side{
+      padding:26px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      opacity:0;
+      transform:translateY(20px);
+      animation:fadeUp .9s .28s ease forwards;
+    }
+
+    .profile{
+      min-height:270px;
+      border-radius:22px;
+      border:1px dashed rgba(153,167,187,.35);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      display:grid;
+      place-items:center;
+      color:var(--muted);
+      text-align:center;
+      padding:20px;
+    }
+
+    .profile img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      border-radius:22px;
+    }
+
+    .meta{
+      display:grid;
+      gap:12px;
+    }
+
+    .meta .box{
+      padding:14px 16px;
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    section{
+      padding:10px 0 42px;
+    }
+
+    .section-title{
+      font-size:1.35rem;
+      margin:0 0 18px;
+      letter-spacing:-.02em;
+    }
+
+    .panel{
+      padding:24px;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+    }
+
+    .about{
+      color:var(--muted);
+      line-height:1.85;
+      margin:0;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .chip{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(124,140,255,.22);
+      background:rgba(124,140,255,.08);
+      color:#d8dfff;
+      transition:transform .25s ease, background .25s ease;
+    }
+
+    .chip:hover{
+      transform:translateY(-2px);
+      background:rgba(124,140,255,.14);
+    }
+
+    .projects{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .project{
+      overflow:hidden;
+      transition:transform .3s ease, border-color .3s ease;
+    }
+
+    .project:hover{
+      transform:translateY(-6px);
+      border-color:rgba(124,140,255,.3);
+    }
+
+    .shot{
+      height:230px;
+      background:
+        linear-gradient(180deg, rgba(8,12,18,.2), rgba(8,12,18,.75)),
+        radial-gradient(circle at top, rgba(124,140,255,.25), transparent 35%),
+        #0c1017;
+      border-bottom:1px solid var(--line);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .shot::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(120deg, transparent 20%, rgba(255,255,255,.08) 40%, transparent 60%);
+      transform:translateX(-120%);
+      animation:shine 5.5s ease-in-out infinite;
+    }
+
+    .shot img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .shot .label{
+      position:absolute;
+      left:18px;
+      bottom:18px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(0,0,0,.42);
+      border:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(10px);
+      font-size:.85rem;
+      color:#edf2ff;
+    }
+
+    .body{
+      padding:22px;
+    }
+
+    .body h3{
+      margin:0 0 10px;
+      font-size:1.18rem;
+    }
+
+    .body p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.78;
+    }
+
+    .links{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .link{
+      padding:10px 14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      transition:transform .25s ease, border-color .25s ease;
+    }
+
+    .link:hover{
+      transform:translateY(-2px);
+      border-color:rgba(34,211,238,.45);
+    }
+
+    footer{
+      padding:24px 0 48px;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(24px);
+      transition:opacity .8s ease, transform .8s ease;
+    }
+
+    .reveal.visible{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    @keyframes fadeUp{
+      from{opacity:0;transform:translateY(20px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    @keyframes fadeDown{
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    @keyframes pulse{
+      0%,100%{transform:scale(1);opacity:.7}
+      50%{transform:scale(1.08);opacity:1}
+    }
+
+    @keyframes shine{
+      0%,45%{transform:translateX(-120%)}
+      100%{transform:translateX(120%)}
+    }
+
+    @media (max-width: 900px){
+      .hero{
+        min-height:auto;
+        padding-top:22px;
+      }
+      .hero-grid,
+      .projects{
+        grid-template-columns:1fr;
+      }
+      h1{
+        font-size:clamp(2.2rem,12vw,4.2rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo"></div>
+        <span>Miss Smouflette</span>
+      </div>
+      <div class="pill">Portfolio développeuse web</div>
+    </header>
+
+    <main class="hero">
+      <div class="hero-grid">
+        <article class="card intro">
+          <div class="kicker"><span class="dot"></span> Développeuse web passionnée</div>
+          <h1>Je crée des expériences <span class="accent">modernes</span>, élégantes et performantes.</h1>
+          <p class="lead">
+            Développeuse web passionnée, j’accompagne mes clients dans la création de solutions digitales modernes, performantes et sur-mesure.
+            Grâce à une expérience concrète sur des projets d’optimisation, d’e-commerce, d’API sécurisées et de plateformes collaboratives,
+            je conçois des interfaces fiables, évolutives et pensées pour offrir une expérience utilisateur de qualité.
+          </p>
+          <div class="cta">
+            <a class="btn primary" href="#projets">Voir mes projets</a>
+            <a class="btn" href="#contact">Me contacter</a>
+          </div>
+        </article>
+
+        <aside class="card side">
+          <div class="profile">
+            <img src="image.jpg" alt="Photo de profil de Miss Smouflette" />
+          </div>
+          <div class="meta">
+            <div class="box"><strong>Stack :</strong> HTML, CSS, JavaScript, TypeScript, Next.js, Prisma, PostgreSQL, NextAuth</div>
+            <div class="box"><strong>Style :</strong> sombre, classique, moderne, premium</div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <section class="reveal">
+      <h2 class="section-title">À propos</h2>
+      <div class="panel">
+        <p class="about">
+          Je développe des interfaces et des applications web avec une approche orientée qualité, clarté et performance.
+          J’aime construire des projets propres, maintenables et visuellement soignés, en accord avec les besoins du client
+          et les standards du web moderne.
+        </p>
+      </div>
+    </section>
+
+    <section class="reveal">
+      <h2 class="section-title">Technologies</h2>
+      <div class="chips">
+        <span class="chip">JavaScript</span>
+        <span class="chip">TypeScript</span>
+        <span class="chip">HTML5</span>
+        <span class="chip">CSS3</span>
+        <span class="chip">Next.js</span>
+        <span class="chip">Prisma</span>
+        <span class="chip">PostgreSQL</span>
+        <span class="chip">NextAuth</span>
+        <span class="chip">Discord OAuth</span>
+        <span class="chip">GitHub</span>
+      </div>
+    </section>
+
+    <section id="projets" class="reveal">
+      <h2 class="section-title">Projets sélectionnés</h2>
+      <div class="projects">
+        <article class="card project">
+          <div class="shot">
+            <img src="Capture-d-ecran-2026-06-12-154444.jpg" alt="Capture du projet ems-app" />
+            <div class="label">ems-app</div>
+          </div>
+          <div class="body">
+            <h3>ems-app</h3>
+            <p>
+              Application présentée ici avec une interface sombre et structurée. Elle met en valeur une approche produit
+              claire, des composants cohérents et une expérience fluide.
+            </p>
+            <div class="links">
+              <a class="link" href="https://github.com/Miss-smouflette/ems-app" target="_blank" rel="noreferrer">GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="card project">
+          <div class="shot">
+            <img src="Capture-d-ecran-2026-06-12-154613.jpg" alt="Capture du projet référencement entreprise" />
+            <div class="label">r-f-rencement-entreprise</div>
+          </div>
+          <div class="body">
+            <h3>r-f-rencement-entreprise</h3>
+            <p>
+              Projet orienté visibilité et référencement, présenté dans un style moderne et sobre. Il permet de montrer
+              à la fois le design, la structure et la logique métier.
+            </p>
+            <div class="links">
+              <a class="link" href="https://github.com/Miss-smouflette/r-f-rencement-entreprise" target="_blank" rel="noreferrer">GitHub</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" class="reveal">
+      <h2 class="section-title">Contact</h2>
+      <div class="panel">
+        <p class="about" style="margin-bottom:0;">
+          Ajoute ici ton email, ton lien Malt, LinkedIn ou Discord. Ce portfolio est pensé pour être hébergé simplement
+          sur GitHub Pages, Vercel ou Netlify.
+        </p>
+      </div>
+    </section>
+
+    <footer>© 2026 Miss Smouflette — Portfolio personnel</footer>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
